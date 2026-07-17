@@ -33,7 +33,10 @@ export default function Home() {
         <h2 className="text-xl font-semibold text-slate-800 mb-3">Recent Notifications</h2>
         <ul className="space-y-2">
           {notifications.map((notification) => (
-            <NotificationCard key={notification} text={notification} />
+            <NotificationCard
+              key={typeof notification === 'string' ? notification : `${notification.title}-${notification.detail}`}
+              text={typeof notification === 'string' ? notification : notification.detail}
+            />
           ))}
         </ul>
       </section>

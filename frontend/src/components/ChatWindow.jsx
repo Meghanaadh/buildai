@@ -8,7 +8,7 @@ export default function ChatWindow({ messages, onAction }) {
           key={message.id}
           role={message.role}
           text={message.text}
-          action={message.action}
+          actions={message.actions}
           onAction={onAction}
         />
       ))}

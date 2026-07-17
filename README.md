@@ -55,19 +55,21 @@ Default API URL: `http://127.0.0.1:8000`
 To point frontend to a different backend:
 
 ```bash
-VITE_API_BASE_URL=http://127.0.0.1:8000/api npm run dev
+VITE_API_BASE_URL=http://127.0.0.1:8000 npm run dev
 ```
 
 ## API Contracts
 
-- `POST /api/chat` with `{ "message": "..." }`
-  - returns: `intent`, `answer`, `action { label, route }`, `source`
-- `GET /api/dashboard`
-  - returns dashboard cards
-- `GET /api/notifications`
-  - returns recent notification items
-- `GET /api/module/{module_name}`
-  - returns module-specific list items
+- `POST /chat` with `{ "message": "...", "history": [] }`
+  - returns: `reply`, `intent`, `actions [{ label, route }]`, `source`
+- `GET /dashboard/cards`
+  - returns: `{ "items": [{ "title": "...", "detail": "..." }] }`
+- `GET /notifications`
+  - returns: `{ "items": [{ "title": "...", "detail": "..." }] }`
+- `GET /modules/{module_name}`
+  - returns module-specific list items in `items`
+
+Compatibility endpoints under `/api/*` and legacy `/dashboard` + `/module/{module_name}` are also available.
 
 ## Knowledge Base Files
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ChatInput from '../components/ChatInput'
 import ChatWindow from '../components/ChatWindow'
-import { chatWithGemma } from '../services/api'
+import { sendChatMessage } from '../services/api'
 
 export default function Assistant() {
   const navigate = useNavigate()
@@ -21,14 +21,14 @@ export default function Assistant() {
     setLoading(true)
 
     try {
-      const response = await chatWithGemma(text)
+      const response = await sendChatMessage(text)
       setMessages((prev) => [
         ...prev,
         {
           id: Date.now() + 1,
           role: 'assistant',
-          text: response.answer,
-          action: response.action,
+          text: response.reply,
+          actions: Array.isArray(response.actions) ? response.actions : [],
         },
       ])
     } catch {

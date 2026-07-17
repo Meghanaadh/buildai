@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api'
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -13,11 +13,12 @@ async function request(path, options = {}) {
   return response.json()
 }
 
-export const chatWithGemma = (message) => request('/chat', {
+export const sendChatMessage = (message, history = []) => request('/chat', {
   method: 'POST',
-  body: JSON.stringify({ message }),
+  body: JSON.stringify({ message, history }),
 })
 
-export const getDashboardData = () => request('/dashboard')
+export const chatWithGemma = sendChatMessage
+export const getDashboardCards = () => request('/dashboard/cards')
 export const getNotifications = () => request('/notifications')
-export const getModuleData = (moduleName) => request(`/module/${moduleName}`)
+export const getModuleData = (moduleName) => request(`/modules/${moduleName}`)

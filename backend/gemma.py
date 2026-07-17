@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from typing import Any
@@ -7,6 +8,8 @@ from typing import Any
 import requests
 
 KNOWLEDGE_DIR = Path(__file__).resolve().parent.parent / "knowledge"
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gemma:4b")
 
 INTENT_KEYWORDS: dict[str, set[str]] = {
     "navigation": {"open", "show", "go to", "navigate", "take me"},
@@ -29,8 +32,8 @@ INTENT_KEYWORDS: dict[str, set[str]] = {
 
 INTENT_TO_ROUTE = {
     "navigation": "/dashboard",
-    "registration": "/placements",
-    "grievance": "/support",
+    "registration": "/academics",
+    "grievance": "/hostel",
     "support": "/support",
     "information": "/academics",
 }
@@ -42,6 +45,37 @@ SECTION_TO_ROUTE = {
     "hostel": "/hostel",
     "administration": "/dashboard",
     "support": "/support",
+}
+
+SECTION_HINTS: dict[str, set[str]] = {
+    "administration": {"transcript", "bonafide", "certificate", "administration", "document"},
+    "academics": {"exam", "attendance", "notes", "course", "semester", "subject"},
+    "placements": {"placement", "company", "resume", "interview", "recruiter", "job"},
+    "events": {"event", "hackathon", "workshop", "club", "fest"},
+    "hostel": {"hostel", "room", "mess", "water", "maintenance"},
+    "support": {"support", "counseling", "anxiety", "stress", "wellness", "mental"},
+}
+
+MODULE_ACTIONS = {
+    "academics": {"label": "Open Academics", "route": "/academics"},
+    "placements": {"label": "Open Placements", "route": "/placements"},
+    "events": {"label": "Open Events", "route": "/events"},
+    "hostel": {"label": "Open Hostel", "route": "/hostel"},
+    "support": {"label": "Book Counseling", "route": "/support"},
+    "dashboard": {"label": "Open Dashboard", "route": "/dashboard"},
+}
+
+MODULE_ALIASES = {
+    "academic": "academics",
+    "academics": "academics",
+    "placement": "placements",
+    "placements": "placements",
+    "event": "events",
+    "events": "events",
+    "hostel": "hostel",
+    "support": "support",
+    "counseling": "support",
+    "dashboard": "dashboard",
 }
 
 
@@ -68,12 +102,23 @@ def _normalize_tokens(text: str) -> set[str]:
 
 def _load_knowledge() -> dict[str, str]:
     docs: dict[str, str] = {}
+    if not KNOWLEDGE_DIR.exists():
+        return docs
+
     for file in sorted(KNOWLEDGE_DIR.glob("*.md")):
         docs[file.stem] = file.read_text(encoding="utf-8")
     return docs
 
 
 def _best_knowledge_match(query: str, docs: dict[str, str]) -> tuple[str | None, str | None]:
+    normalized_query = query.lower()
+
+    for section, hints in SECTION_HINTS.items():
+        if section in docs and any(hint in normalized_query for hint in hints):
+            content = docs[section]
+            lines = [line.strip() for line in content.splitlines() if line.strip() and not line.startswith("#")]
+            return section, "\n".join(lines[:5])
+
     query_tokens = _normalize_tokens(query)
     if not query_tokens:
         return None, None
@@ -129,8 +174,8 @@ def _support_reply(message: str, support_snippet: str | None) -> str:
 def _call_ollama(prompt: str) -> str | None:
     try:
         response = requests.post(
-            "http://127.0.0.1:11434/api/generate",
-            json={"model": "gemma:4b", "prompt": prompt, "stream": False},
+            f"{OLLAMA_BASE_URL}/api/generate",
+            json={"model": OLLAMA_MODEL, "prompt": prompt, "stream": False},
             timeout=8,
         )
         response.raise_for_status()
@@ -143,17 +188,47 @@ def _call_ollama(prompt: str) -> str | None:
     return None
 
 
+def _route_from_message(message: str) -> dict[str, str] | None:
+    lowered = message.lower()
+    for alias, module_name in MODULE_ALIASES.items():
+        if alias in lowered:
+            return MODULE_ACTIONS[module_name]
+    return None
+
+
 def respond_to_student(message: str) -> dict[str, Any]:
     intent = classify_intent(message)
     docs = _load_knowledge()
     matched_section, snippet = _best_knowledge_match(message, docs)
 
     if intent == "grievance":
-        content = _complaint_draft(message)
-    elif intent == "support":
+        return {
+            "reply": _complaint_draft(message),
+            "intent": intent,
+            "actions": [MODULE_ACTIONS["hostel"]],
+            "source": "grievance_template",
+        }
+    if intent == "support":
         support_snippet = docs.get("support", "")
-        content = _support_reply(message, support_snippet[:400] if support_snippet else None)
-    elif snippet:
+        return {
+            "reply": _support_reply(message, support_snippet[:400] if support_snippet else None),
+            "intent": intent,
+            "actions": [MODULE_ACTIONS["support"]],
+            "source": "support_protocol",
+        }
+    if intent == "navigation":
+        action = _route_from_message(message) or MODULE_ACTIONS["dashboard"]
+        return {
+            "reply": (
+                f"Sure, I can route you there now. Use the action below to continue to "
+                f"{action['label'].replace('Open ', '')}."
+            ),
+            "intent": intent,
+            "actions": [action],
+            "source": "navigation",
+        }
+
+    if snippet:
         guard_prompt = (
             "Answer only using the provided campus knowledge. "
             "If information is missing, explicitly say to contact the department.\n\n"
@@ -161,27 +236,18 @@ def respond_to_student(message: str) -> dict[str, Any]:
             f"Knowledge:\n{snippet}\n"
         )
         content = _call_ollama(guard_prompt) or f"Based on campus information:\n{snippet}"
+        source = matched_section or "knowledge_base"
     else:
         content = _department_fallback(matched_section)
-
-    if not snippet and intent in {"information", "registration", "navigation"}:
-        content = _department_fallback(matched_section)
+        source = "knowledge_fallback"
 
     route = SECTION_TO_ROUTE.get(matched_section or "", INTENT_TO_ROUTE[intent])
-    action_labels = {
-        "navigation": "Open Service",
-        "registration": "Open Registration",
-        "grievance": "Open Complaint Form",
-        "support": "Book Counseling",
-        "information": "Open Relevant Module",
-    }
+    action_label = "Open Registration" if intent == "registration" else "Open Relevant Module"
+    actions = [{"label": action_label, "route": route}] if route else []
 
     return {
+        "reply": content,
         "intent": intent,
-        "answer": content,
-        "action": {
-            "label": action_labels[intent],
-            "route": route,
-        },
-        "source": matched_section,
+        "actions": actions,
+        "source": source,
     }
