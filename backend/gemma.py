@@ -9,11 +9,22 @@ import requests
 KNOWLEDGE_DIR = Path(__file__).resolve().parent.parent / "knowledge"
 
 INTENT_KEYWORDS: dict[str, set[str]] = {
-    "navigation": {"open", "show", "go to", "navigate", "take me", "book"},
-    "registration": {"register", "apply", "enroll", "sign up", "join"},
+    "navigation": {"open", "show", "go to", "navigate", "take me"},
+    "registration": {"register", "enroll", "sign up", "join"},
     "grievance": {"complaint", "issue", "not working", "problem", "damaged", "no water", "ragging"},
     "support": {"stressed", "stress", "anxious", "anxiety", "counsel", "mental", "depressed", "panic"},
-    "information": {"how", "when", "where", "what", "who", "policy", "procedure", "schedule"},
+    "information": {
+        "how",
+        "when",
+        "where",
+        "what",
+        "who",
+        "policy",
+        "procedure",
+        "schedule",
+        "transcript",
+        "bonafide",
+    },
 }
 
 INTENT_TO_ROUTE = {
@@ -36,9 +47,18 @@ SECTION_TO_ROUTE = {
 
 def classify_intent(message: str) -> str:
     text = message.lower().strip()
-    for intent, keywords in INTENT_KEYWORDS.items():
-        if any(keyword in text for keyword in keywords):
-            return intent
+    scores = {
+        intent: sum(1 for keyword in keywords if keyword in text)
+        for intent, keywords in INTENT_KEYWORDS.items()
+    }
+    if "book" in text and ("counsel" in text or "appointment" in text):
+        scores["support"] += 1
+    if "apply" in text and ("transcript" in text or "bonafide" in text):
+        scores["information"] += 2
+
+    best_intent = max(scores, key=scores.get)
+    if scores[best_intent] > 0:
+        return best_intent
     return "information"
 
 
