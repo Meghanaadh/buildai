@@ -43,41 +43,65 @@ class ListResponse(BaseModel):
 
 MODULE_DATA = {
     "academics": [
-        {"title": "Notes", "detail": "Department notes are updated weekly."},
-        {"title": "Exam Schedule", "detail": "Mid-semester exams start from 12 Aug."},
+        {"title": "Notes & Lecture Slides", "detail": "Operating Systems (Unit 3-4) and DBMS (Unit 2) notes uploaded by Prof. Lakshmi."},
+        {"title": "Mid-2 Exam Schedule", "detail": "Timetable released. Exams start from October 20. Seating arrangements on ERP."},
+        {"title": "Attendance Threshold", "detail": "CSE-III Section A average is 72%. Remember, 75% is required to avoid detention."},
+        {"title": "Lab Schedule Shift", "detail": "DBMS Lab for batch B2 has been rescheduled to Thursday, 2:00 PM - 5:00 PM."},
+        {"title": "Elective Registration", "detail": "Enrollment for ML and Cloud Computing electives is open until August 10."},
+        {"title": "NPTEL Credit Transfer", "detail": "Submit your NPTEL course completion certificate to the HoD office before Nov 15."}
     ],
     "placements": [
-        {"title": "Upcoming Companies", "detail": "Apex Labs and CoreNova hiring this month."},
-        {"title": "Mock Interview", "detail": "Registration open until Friday."},
+        {"title": "TCS Placement Drive", "detail": "Drive on Aug 5. Eligible: CSE/IT/ECE (60%+ CGPA, no backlogs). Register by Aug 2."},
+        {"title": "Amazon Hiring", "detail": "Drive on Sep 1. Eligible: CSE/IT (7.5%+ CGPA). Online test on HackerRank. Package: 12-18 LPA."},
+        {"title": "Mock Interviews", "detail": "Conducted every Saturday from 10 AM. Book your slot on the placement portal."},
+        {"title": "Resume Review Session", "detail": "Submit your draft resume by Wednesday to get personalized feedback on Friday."},
+        {"title": "Zoho Summer Internships", "detail": "Applications open for pre-final year students. Deadline to apply is August 15."},
+        {"title": "Placement Cell Contact", "detail": "Dr. Priya Sharma, placements@vidyuth.edu.in, Office: placement cell cabin."}
     ],
     "events": [
-        {"title": "Hackathon", "detail": "Campus CodeSprint starts 25 July."},
-        {"title": "Workshop", "detail": "AI for Robotics workshop on Saturday."},
+        {"title": "Yukti 2026 Tech Fest", "detail": "October 15-17. 50+ technical events including robot wars and drone racing."},
+        {"title": "CodeSprint 5.0 Hackathon", "detail": "August 2-3. 36-hour coding challenge. Teams of 3-4. Prizes: Rs 50K/25K/10K."},
+        {"title": "Gen AI & LLM Workshop", "detail": "August 10. Guest lecture by Dr. Ramesh Kumar (IIT Hyderabad). Limited to 120 seats."},
+        {"title": "NSS Blood Donation Camp", "detail": "September 5, 9:00 AM - 2:00 PM in the college auditorium. Refreshments provided."},
+        {"title": "LaunchPad Pitch Competition", "detail": "October 5. Pitch startup ideas to VCs. Prize pool of Rs 1,00,000."},
+        {"title": "Photography Exhibition", "detail": "September 1-3. Submit your entries to the club president by August 25."}
     ],
     "hostel": [
-        {"title": "Vacancies", "detail": "8 shared rooms available near north gate."},
-        {"title": "Complaint Desk", "detail": "Submit maintenance grievances online."},
+        {"title": "Sri Sai Residency", "detail": "1.2 km away. Rs. 8,000/month. AC/Non-AC rooms. 3 vacancies left. Contact: +91-98765-43210."},
+        {"title": "Green Valley PG", "detail": "0.8 km away. Rs. 6,500/month. 2/3 shared rooms. 5 beds available. Contact: +91-87654-32109."},
+        {"title": "Campus Nest Hostel", "detail": "0.5 km away. Rs. 9,500/month. AC single/double. Fully booked, waitlist open. +91-76543-21098."},
+        {"title": "Mess Timings", "detail": "Breakfast: 7:30-9:00 AM. Lunch: 12:30-2:00 PM. Dinner: 7:30-9:00 PM."},
+        {"title": "Maintenance Desk", "detail": "Log requests at Warden Room 101. Standard response time is 48 hours."},
+        {"title": "Warden Contact", "detail": "Mr. Venkatesh Reddy (+91-94321-56789), available 9:00 AM - 6:00 PM."}
     ],
     "support": [
-        {"title": "Counseling", "detail": "Book sessions Mon-Sat between 9 AM and 5 PM."},
-        {"title": "Emergency", "detail": "Campus helpline: +91-00000-00000."},
+        {"title": "Counseling & Wellness", "detail": "Book confidential sessions with Dr. Anitha Rao, Mon-Sat 9-5 in Room 205 Admin Block."},
+        {"title": "Sahaya Peer Group", "detail": "Meets every Wednesday at 4:00 PM in the Student Activity Center. All are welcome."},
+        {"title": "Campus Security Helpline", "detail": "Emergency contact: +91-40-2345-6792. Active 24/7. First aid available."},
+        {"title": "Anti-Ragging Committee", "detail": "Contact Prof. K. Suresh, antiragging@vidyuth.edu.in. Toll-Free: 1800-180-5522."},
+        {"title": "Yoga & Meditation", "detail": "Daily yoga sessions from 6:00 - 7:00 AM at the sports ground. Meditation room open 8 AM - 8 PM."}
     ],
 }
 
 DASHBOARD_CARDS = [
-    {"title": "Placement Notifications", "detail": "2 companies opened applications this week."},
-    {"title": "Course Registration", "detail": "Elective registration opens Monday."},
-    {"title": "Upcoming Events", "detail": "Hackathon, workshops, and clubs this week."},
-    {"title": "Academic Notes", "detail": "Operating Systems notes updated in portal."},
-    {"title": "Hostel Availability", "detail": "8 rooms available in nearby hostels."},
-    {"title": "Mental Wellness", "detail": "Counseling appointment slots are open."},
-    {"title": "Recent Announcements", "detail": "Bonafide process now supports online request."},
+    {"title": "TCS Placement Drive", "detail": "Applications open for CSE/IT/ECE students. Register by August 2."},
+    {"title": "Mid-2 Exam Schedule", "detail": "Exams start October 20. Seating arrangements and timetables published on ERP."},
+    {"title": "CodeSprint 5.0 Hackathon", "detail": "Registrations open. Register your team of 3-4 by July 30. Cash prizes up to Rs 50,000."},
+    {"title": "Attendance Warning", "detail": "12 students in CSE-III Section A below 75%. Submit condonation certificates by September 30."},
+    {"title": "Gen AI & LLM Workshop", "detail": "August 10 by IIT Hyderabad faculty. Only 40 seats remaining. Register now."},
+    {"title": "Hostel Vacancies", "detail": "Sri Sai Residency (3 rooms) and Green Valley PG (5 beds) have open slots."},
+    {"title": "Counseling Slots Open", "detail": "Dr. Anitha Rao has counseling slots open. Book via student ERP portal."},
+    {"title": "Library Notice", "detail": "New IEEE and Springer journal subscriptions activated. Log in using student credentials."},
+    {"title": "Fee Payment Reminder", "detail": "Odd semester tuition fee due by August 31. Late fee of Rs 100/day applies after deadline."}
 ]
 
 NOTIFICATIONS = [
-    {"title": "Admin Office", "detail": "Transcript requests take 3-5 working days."},
-    {"title": "Placement Cell", "detail": "Resume screening session this Friday."},
-    {"title": "Support Center", "detail": "Wellness group session at 4 PM today."},
+    {"title": "Placement Cell", "detail": "TCS pre-placement talk on August 3 at 2:00 PM in Seminar Hall 1."},
+    {"title": "Admin Office", "detail": "Online bonafide certificate requests submitted before 11:00 AM processed same-day."},
+    {"title": "Exam Branch", "detail": "Mid-2 examination hall tickets will be available on the student ERP portal from October 15."},
+    {"title": "Student Council", "detail": "Nominations open for Cultural Secretary. Submit your nomination forms by August 8."},
+    {"title": "IT Department", "detail": "Campus WiFi maintenance scheduled for August 4, 2:00 AM - 6:00 AM. Expect downtime."},
+    {"title": "Library Notice", "detail": "Overdue book returns deadline is August 1 to avoid a Rs. 5/day fine."}
 ]
 
 

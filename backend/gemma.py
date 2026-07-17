@@ -8,7 +8,7 @@ from typing import Any
 
 import requests
 
-DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "gemma3:4b")
+DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "gemma4:e4b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
 INTENT_RULES = [
@@ -167,10 +167,14 @@ def _call_ollama(prompt: str) -> str | None:
             {"role": "user", "content": prompt},
         ],
         "stream": False,
+        "options": {
+            "num_gpu": 0,
+            "num_ctx": 2048,
+        },
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=25)
+        response = requests.post(url, json=payload, timeout=120)
         response.raise_for_status()
         data: dict[str, Any] = response.json()
         return data.get("message", {}).get("content", "").strip() or None
