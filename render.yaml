@@ -1,0 +1,12 @@
+services:
+  # Backend API Service
+  - type: web
+    name: campus-companion-backend
+    env: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: OLLAMA_BASE_URL
+        value: http://localhost:11434  # Fallback if local Ollama isn't configured
+      - key: OLLAMA_MODEL
+        value: gemma4:e4b
