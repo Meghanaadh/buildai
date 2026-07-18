@@ -53,9 +53,7 @@ Add project screenshots in [/screenshots](file:///C:/Users/megha/.gemini/antigra
 
 ## Demo Video
 
-Uploaded demo video. [Watch Demo](https://)
-
-(https://drive.google.com/file/d/157ltCFCmgYZA3FWR2_uk9qslEHMXhNhJ/view?usp=drivesdk)
+Uploaded demo video. [Watch Demo](https://drive.google.com/file/d/157ltCFCmgYZA3FWR2_uk9qslEHMXhNhJ/view?usp=drivesdk)
 ---
 
 ## Installation Steps
