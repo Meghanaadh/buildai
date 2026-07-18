@@ -1,8 +1,5 @@
 # Campus Companion AI
 
-[![Deploy to Render](https://render.com/images/deploy-to-render.svg)](https://render.com/deploy?repo=https://github.com/Meghanaadh/buildai)
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMeghanaadh%2Fbuildai&root-directory=frontend)
-
 ## Problem Statement
 
 College students often struggle to find clear, unified, and accurate information regarding college academics, hostel accommodations, placement schedules, administrative processes, and mental health support. Official portals are often fragmented, policies can be confusing, and manual queries to administration desks create long queues, administrative burden, and delays. 
@@ -44,17 +41,21 @@ Google's Gemma 4 is integrated into the backend application to power the chat as
 ## Proof of Google AI Usage
 
 Include terminal inference logs or system prompt parameters in the [/proofs](file:///C:/Users/megha/.gemini/antigravity/scratch/buildai/proofs) folder.
+<img width="1920" height="1020" alt="Screenshot 2026-07-18 063756" src="https://github.com/user-attachments/assets/50f91116-fcf6-40f9-ab9c-a55c2a568a7b" />
 
 ## Screenshots
 
 Add project screenshots in [/screenshots](file:///C:/Users/megha/.gemini/antigravity/scratch/buildai/screenshots) folder.
+<img width="1920" height="1020" alt="Screenshot 2026-07-18 063515" src="https://github.com/user-attachments/assets/3043b2d5-c3f9-4f2a-99fa-5b3ccb4ef441" />
+
 
 ---
 
 ## Demo Video
 
-Upload your demo video to Google Drive and paste the shareable link here (max 3 minutes). [Watch Demo](https://)
+Uploaded demo video. [Watch Demo](https://)
 
+(https://drive.google.com/file/d/157ltCFCmgYZA3FWR2_uk9qslEHMXhNhJ/view?usp=drivesdk)
 ---
 
 ## Installation Steps
